@@ -89,10 +89,10 @@ def test_n_hanzi(predictions_values, index):
     plt.show()
 
     # show the prediction result
-    print ('Result(image index): ', np.argmax(predictions_values[index]["probabilities"]))
+    print ('Prediction label is: ', np.argmax(predictions_values[index]["probabilities"]))
 
     # Show the lable
-    print ("The label of index %d is %d"%(index, test_data.labels[index]))
+    print ("Real label is: %d"%(test_data.labels[index]))
 
 for i in range(37):
-    test_n_hanzi(predictions_value_array, i)
+    test_n_hanzi(predictions_value_array, i)   
