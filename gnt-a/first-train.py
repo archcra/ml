@@ -17,32 +17,25 @@ def input(dataset):
 
 class DataSetLoader:
     def __init__(self, data_dir):
-        # Set FLAGS.charset_size to a small value if available computation power is limited.
+        # Set CHARSET_SIZE to a small value if available computation power is limited.
         truncate_path = data_dir + ('%05d' % CHARSET_SIZE)
-        print(truncate_path)
-        self.image_names = []
+        print('Now processing path: ', truncate_path)
+        image_names = []
         for root, sub_folder, file_list in os.walk(data_dir):
             if root < truncate_path:
-                self.image_names += [os.path.join(root, file_path) for file_path in file_list]
-        random.shuffle(self.image_names)
-        self.labels = [int(file_name[len(data_dir):].split(os.sep)[0]) for file_name in self.image_names]
-        self.images_rgb = [imread(file_name) for file_name in self.image_names]
-        self.image_resized = [resize(image, (IMAGE_SIZE, IMAGE_SIZE)) for image in self.images_rgb]
-        self.images = [rgb2gray(item) for item in self.image_resized]
+                image_names += [os.path.join(root, file_path) for file_path in file_list]
+        random.shuffle(image_names)
+        self.labels = [int(file_name[len(data_dir):].split(os.sep)[0]) for file_name in image_names]
+        images_rgb = [imread(file_name) for file_name in image_names]
+        image_resized = [resize(image, (IMAGE_SIZE, IMAGE_SIZE)) for image in images_rgb]
+        self.images = [rgb2gray(item) for item in image_resized]
 
         # convert list to numpy array
         self.images = array(self.images)
         self.labels = array(self.labels)
 
-    @property
-    def size(self):
-        return len(self.labels)
-
 train_data = DataSetLoader(data_dir='../data/train_/')
-test_data = DataSetLoader(data_dir='../data/test_/')
-print ('Data loaded ...')
-
-
+print ('Train data loaded.')
 
 # Specify feature
 feature_columns = [tf.feature_column.numeric_column("x", shape=[IMAGE_SIZE, IMAGE_SIZE])]
@@ -65,11 +58,10 @@ train_input_fn = tf.estimator.inputs.numpy_input_fn(
     batch_size=50,
     shuffle=True
 )
-print ('Begin to train ...')
 
-classifier.train(input_fn=train_input_fn, steps=20000)
-print ('Train done ...')
-
+classifier.train(input_fn=train_input_fn, steps=200)
+print ('Train done, begin to test ...')
+test_data = DataSetLoader(data_dir='../data/test_/')
 # Define the test inputs
 test_input_fn = tf.estimator.inputs.numpy_input_fn(
     x={"x": input(test_data)[0]},
