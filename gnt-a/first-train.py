@@ -52,16 +52,17 @@ classifier = tf.estimator.DNNClassifier(
 
 # Define the training inputs
 train_input_fn = tf.estimator.inputs.numpy_input_fn(
-    x={"x": input(test_data)[0]},
-    y=input(test_data)[1],
+    x={"x": input(train_data)[0]},
+    y=input(train_data)[1],
     num_epochs=None,
     batch_size=50,
     shuffle=True
 )
 
-classifier.train(input_fn=train_input_fn, steps=200)
-print ('Train done, begin to test ...')
+classifier.train(input_fn=train_input_fn, steps=200000)
+
 test_data = DataSetLoader(data_dir='../data/test_/')
+print ('Train done, begin to test ...')
 # Define the test inputs
 test_input_fn = tf.estimator.inputs.numpy_input_fn(
     x={"x": input(test_data)[0]},

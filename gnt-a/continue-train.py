@@ -22,8 +22,8 @@ def input(dataset):
 
 # Define the training inputs
 train_input_fn = tf.estimator.inputs.numpy_input_fn(
-    x={"x": input(test_data)[0]},
-    y=input(test_data)[1],
+    x={"x": input(train_data)[0]},
+    y=input(train_data)[1],
     num_epochs=None,
     batch_size=50,
     shuffle=True
