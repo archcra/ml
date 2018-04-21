@@ -99,3 +99,8 @@ ENV/
 
 # mypy
 .mypy_cache/
+
+gnt-a/notebooks/data/
+gnt-a/notebooks/dfs/
+gnt-a/notebooks/code/tmp
+gnt-a/notebooks/code/MNIST_data
